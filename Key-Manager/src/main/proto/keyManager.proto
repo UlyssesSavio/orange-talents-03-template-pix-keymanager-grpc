@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "br.com.zup.edu";
+option java_outer_classname = "KeyManager";
+option objc_class_prefix = "HLW";
+
+package br.com.zup.edu;
+
+service KeyManagerService {
+  rpc cadastra (KeyPixRequest) returns (KeyPixResponse) {}
+}
+
+enum tipo{
+  CONTA_CORRENTE=0;
+  CONTA_POUPANCA=1;
+}
+
+enum tipoChave{
+  CPF=0;
+  TELEFONE=1;
+  EMAIL=2;
+  RANDOM=3;
+
+}
+
+message KeyPixRequest{
+  string identificadorCliente=1;
+  string chaveASerGerada=2;
+  tipo tipo=3;
+  tipoChave tipoChave=4;
+
+
+
+}
+
+message KeyPixResponse{
+  string chavePix=1;
+}
