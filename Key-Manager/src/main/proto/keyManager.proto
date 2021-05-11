@@ -11,6 +11,12 @@ service KeyManagerService {
   rpc cadastra (KeyPixRequest) returns (KeyPixResponse) {}
 }
 
+service KeyManagerRemove{
+  rpc remove(KeyRemoveRequest) returns (KeyRemoveResponse){}
+}
+
+
+
 enum tipo{
   CONTA_CORRENTE=0;
   CONTA_POUPANCA=1;
@@ -23,6 +29,16 @@ enum tipoChave{
   RANDOM=3;
 
 }
+
+message KeyRemoveRequest{
+  string idUsuario =1;
+  string chave =2;
+}
+message KeyRemoveResponse{
+  string idUsuario =1;
+  string chave =2;
+}
+
 
 message KeyPixRequest{
   string identificadorCliente=1;
