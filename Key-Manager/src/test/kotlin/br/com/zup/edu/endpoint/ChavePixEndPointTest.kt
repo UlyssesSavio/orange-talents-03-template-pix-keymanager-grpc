@@ -2,11 +2,13 @@ package br.com.zup.edu.endpoint
 
 import br.com.zup.edu.KeyManagerServiceGrpc
 import br.com.zup.edu.KeyPixRequest
+import br.com.zup.edu.client.BancoCentralClient
 import br.com.zup.edu.client.ItauErpClient
-import br.com.zup.edu.enum.Tipo
+import br.com.zup.edu.enum.TipoChave
 import br.com.zup.edu.model.Instituicao
 import br.com.zup.edu.model.Titular
 import br.com.zup.edu.repository.ChavePixRepository
+import br.com.zup.edu.request.*
 import br.com.zup.edu.responseClient.ContasResponse
 import br.com.zup.edu.tipo
 import br.com.zup.edu.tipoChave
@@ -19,10 +21,10 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,6 +37,8 @@ internal class ChavePixEndPointTest(
     @Inject
     lateinit var itauErpClient: ItauErpClient
 
+    @Inject
+    lateinit var bancoCentralClient: BancoCentralClient
 
     @BeforeEach
     fun antesDeCada() {
@@ -50,19 +54,34 @@ internal class ChavePixEndPointTest(
 
         val cpf = "59715734030"
         val idUsuario = "c56dfef4-7901-44fb-84e2-a2cefb157890"
+        val chaveRandom="sou aleatorio"
+
+        val contasResponse = ContasResponse(
+            tipo.CONTA_CORRENTE,
+            Instituicao("itau", "123"),
+            "456123",
+            "12",
+            Titular(idUsuario, "Rafael", cpf)
+        )
 
         Mockito.`when`(itauErpClient.consultaContas(idUsuario, "CONTA_CORRENTE"))
             .thenReturn(
-                HttpResponse.ok(
-                    ContasResponse(
-                        Tipo.CONTA_CORRENTE,
-                        Instituicao("itau", "123"),
-                        "456123",
-                        "12",
-                        Titular(idUsuario, "Rafael", cpf)
-                    )
-                )
+                HttpResponse.ok(contasResponse)
             )
+
+        val createPixKeyResponse = CreatePixKeyResponse(TypeKey.RANDOM, chaveRandom, BankAccount("","","",AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON,"",""), LocalDateTime.now())
+
+        Mockito.`when`(bancoCentralClient.cadastraChave(
+            CreatePixKeyRequest.build(KeyPixRequest.newBuilder()
+                .setChaveASerGerada("")
+                .setTipo(tipo.CONTA_CORRENTE)
+                .setTipoChave(tipoChave.RANDOM)
+                .setIdentificadorCliente(idUsuario)
+                .build(),contasResponse )
+
+        )).thenReturn(HttpResponse.created(createPixKeyResponse)
+        )
 
         //acao
         val response = grpcClient.cadastra(
@@ -75,10 +94,12 @@ internal class ChavePixEndPointTest(
         )
 
 
+
         //validacao
 
         with(response) {
             assertNotNull(this.chavePix)
+            assertEquals(chaveRandom, this.chavePix)
 
         }
 
@@ -99,7 +120,7 @@ internal class ChavePixEndPointTest(
             .thenReturn(
                 HttpResponse.ok(
                     ContasResponse(
-                        Tipo.CONTA_CORRENTE,
+                        tipo.CONTA_CORRENTE,
                         Instituicao("itau", "123"),
                         "456123",
                         "12",
@@ -138,18 +159,34 @@ internal class ChavePixEndPointTest(
         val cpf = "59715734030"
         val idUsuario = "c56dfef4-7901-44fb-84e2-a2cefb157890"
 
+        val contasResponse = ContasResponse(
+            tipo.CONTA_CORRENTE,
+            Instituicao("itau", "123"),
+            "456123",
+            "12",
+            Titular(idUsuario, "Rafael", cpf)
+        )
+
         Mockito.`when`(itauErpClient.consultaContas(idUsuario, "CONTA_CORRENTE"))
             .thenReturn(
-                HttpResponse.ok(
-                    ContasResponse(
-                        Tipo.CONTA_CORRENTE,
-                        Instituicao("itau", "123"),
-                        "456123",
-                        "12",
-                        Titular(idUsuario, "Rafael", cpf)
-                    )
+                HttpResponse.ok(contasResponse)
                 )
-            )
+
+        val createPixKeyResponse = CreatePixKeyResponse(TypeKey.EMAIL, email, BankAccount("","","",AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON,"",""), LocalDateTime.now())
+
+
+
+        Mockito.`when`(bancoCentralClient.cadastraChave(
+            CreatePixKeyRequest.build(KeyPixRequest.newBuilder()
+                .setChaveASerGerada(email)
+                .setTipo(tipo.CONTA_CORRENTE)
+                .setTipoChave(tipoChave.EMAIL)
+                .setIdentificadorCliente(idUsuario)
+                .build(),contasResponse )
+
+        )).thenReturn(HttpResponse.created(createPixKeyResponse)
+        )
 
         //acao
         val response = grpcClient.cadastra(
@@ -160,6 +197,8 @@ internal class ChavePixEndPointTest(
                 .setTipoChave(tipoChave.EMAIL)
                 .build()
         )
+
+
 
 
         //validacao
@@ -186,7 +225,7 @@ internal class ChavePixEndPointTest(
             .thenReturn(
                 HttpResponse.ok(
                     ContasResponse(
-                        Tipo.CONTA_CORRENTE,
+                        tipo.CONTA_CORRENTE,
                         Instituicao("itau", "123"),
                         "456123",
                         "12",
@@ -225,18 +264,33 @@ internal class ChavePixEndPointTest(
         val cpf = "59715734030"
         val idUsuario = "c56dfef4-7901-44fb-84e2-a2cefb157890"
 
+        val contasResponse = ContasResponse(
+            tipo.CONTA_CORRENTE,
+            Instituicao("itau", "123"),
+            "456123",
+            "12",
+            Titular(idUsuario, "Rafael", cpf)
+        )
+
+        val createPixKeyResponse = CreatePixKeyResponse(TypeKey.PHONE, telefone, BankAccount("","","",AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON,"",""), LocalDateTime.now())
+
         Mockito.`when`(itauErpClient.consultaContas(idUsuario, "CONTA_CORRENTE"))
             .thenReturn(
-                HttpResponse.ok(
-                    ContasResponse(
-                        Tipo.CONTA_CORRENTE,
-                        Instituicao("itau", "123"),
-                        "456123",
-                        "12",
-                        Titular(idUsuario, "Rafael", cpf)
-                    )
-                )
+                HttpResponse.ok(contasResponse)
             )
+
+
+        Mockito.`when`(bancoCentralClient.cadastraChave(
+            CreatePixKeyRequest.build(KeyPixRequest.newBuilder()
+                .setChaveASerGerada(telefone)
+                .setTipo(tipo.CONTA_CORRENTE)
+                .setTipoChave(tipoChave.TELEFONE)
+                .setIdentificadorCliente(idUsuario)
+                .build(),contasResponse )
+
+        )).thenReturn(HttpResponse.created(createPixKeyResponse)
+        )
 
         //acao
         val response = grpcClient.cadastra(
@@ -247,6 +301,8 @@ internal class ChavePixEndPointTest(
                 .setTipoChave(tipoChave.TELEFONE)
                 .build()
         )
+
+
 
 
         //validacao
@@ -268,18 +324,37 @@ internal class ChavePixEndPointTest(
         val cpf = "59715734030"
         val idUsuario = "c56dfef4-7901-44fb-84e2-a2cefb157890"
 
+
+        val contasResponse = ContasResponse(
+            tipo.CONTA_CORRENTE,
+            Instituicao("itau", "123"),
+            "456123",
+            "12",
+            Titular(idUsuario, "Rafael", cpf)
+        )
+
+        val createPixKeyResponse = CreatePixKeyResponse(TypeKey.CPF, cpf, BankAccount("","","",AccountBank.CACC),
+        Owner(PersonType.NATURAL_PERSON,"",""), LocalDateTime.now())
+
+
         Mockito.`when`(itauErpClient.consultaContas(idUsuario, "CONTA_CORRENTE"))
             .thenReturn(
-                HttpResponse.ok(
-                    ContasResponse(
-                        Tipo.CONTA_CORRENTE,
-                        Instituicao("itau", "123"),
-                        "456123",
-                        "12",
-                        Titular(idUsuario, "Rafael", cpf)
-                    )
-                )
+                HttpResponse.ok(contasResponse)
             )
+
+
+
+        Mockito.`when`(bancoCentralClient.cadastraChave(
+            CreatePixKeyRequest.build(KeyPixRequest.newBuilder()
+                .setChaveASerGerada(cpf)
+                .setTipo(tipo.CONTA_CORRENTE)
+                .setTipoChave(tipoChave.CPF)
+                .setIdentificadorCliente(idUsuario)
+                .build(),contasResponse )
+
+        )).thenReturn(HttpResponse.created(createPixKeyResponse)
+        )
+
 
         //acao
         val response = grpcClient.cadastra(
@@ -314,7 +389,7 @@ internal class ChavePixEndPointTest(
             .thenReturn(
                 HttpResponse.ok(
                     ContasResponse(
-                        Tipo.CONTA_CORRENTE,
+                        tipo.CONTA_CORRENTE,
                         Instituicao("itau", "123"),
                         "456123",
                         "12",
@@ -370,9 +445,23 @@ internal class ChavePixEndPointTest(
     }
 
 
+    object MockitoHelper {
+        fun <T> anyObject(): T {
+            Mockito.any<T>()
+            return uninitialized()
+        }
+        @Suppress("UNCHECKED_CAST")
+        fun <T> uninitialized(): T =  null as T
+    }
+
     @MockBean(ItauErpClient::class)
     fun itauClient(): ItauErpClient? {
         return Mockito.mock(ItauErpClient::class.java)
+    }
+
+    @MockBean(BancoCentralClient::class)
+    fun bancoCentralClient(): BancoCentralClient? {
+        return Mockito.mock(BancoCentralClient::class.java)
     }
 
 

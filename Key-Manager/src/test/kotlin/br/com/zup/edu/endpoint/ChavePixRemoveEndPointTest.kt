@@ -1,23 +1,24 @@
 package br.com.zup.edu.endpoint
 
 import br.com.zup.edu.KeyManagerRemoveGrpc
-import br.com.zup.edu.KeyManagerServiceGrpc
-import br.com.zup.edu.KeyPixRequest
 import br.com.zup.edu.KeyRemoveRequest
+import br.com.zup.edu.client.BancoCentralClient
 import br.com.zup.edu.client.ItauErpClient
-import br.com.zup.edu.enum.Tipo
 import br.com.zup.edu.enum.TipoChave
 import br.com.zup.edu.handler.exception.UsuarioNaoEncontradoException
 import br.com.zup.edu.model.ChavePix
 import br.com.zup.edu.model.ContaEmbed
+import br.com.zup.edu.model.Instituicao
 import br.com.zup.edu.repository.ChavePixRepository
+import br.com.zup.edu.request.DeletePixKeyRequest
+import br.com.zup.edu.responseClient.ClienteResponse
+import br.com.zup.edu.tipo
 import io.grpc.ManagedChannel
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Assertions.*
@@ -35,6 +36,8 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
     @Inject
     lateinit var itauErpClient: ItauErpClient
 
+    @Inject
+    lateinit var bancoCentralClient:BancoCentralClient
 
     @BeforeEach
     fun antesDeCada() {
@@ -50,7 +53,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "ae7daf87-3f17-4070-99fe-24fb399327b4"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.RANDOM)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.RANDOM)
         chavePixRepository.save(chavePix)
 
         //acao
@@ -77,14 +80,19 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         //cenario
         val chave = "ae7daf87-3f17-4070-99fe-24fb399327b4"
         val idUsuario = "123456"
+        val ispb = "12345"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.RANDOM)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.RANDOM)
         chavePixRepository.save(chavePix)
+
+        val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
 
         //acao
         Mockito.`when`(itauErpClient.consultaClientes(idUsuario)).thenReturn(
-            HttpResponse.ok()
+            HttpResponse.ok(clienteResponse)
         )
+
+        Mockito.`when`(bancoCentralClient.deletaChave(chave, DeletePixKeyRequest(chave, ispb))).thenReturn(HttpResponse.ok())
 
 
         //validacao
@@ -114,7 +122,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "teste@teste.com"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.EMAIL)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.EMAIL)
         chavePixRepository.save(chavePix)
 
         //acao
@@ -142,14 +150,19 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         //cenario
         val chave = "teste@teste"
         val idUsuario = "123456"
+        val ispb = "12345"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.EMAIL)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.EMAIL)
         chavePixRepository.save(chavePix)
+
+        val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
 
         //acao
         Mockito.`when`(itauErpClient.consultaClientes(idUsuario)).thenReturn(
-            HttpResponse.ok()
+            HttpResponse.ok(clienteResponse)
         )
+
+        Mockito.`when`(bancoCentralClient.deletaChave(chave, DeletePixKeyRequest(chave, ispb))).thenReturn(HttpResponse.ok())
 
 
         //validacao
@@ -180,7 +193,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "+5512935001232"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.TELEFONE)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.TELEFONE)
         chavePixRepository.save(chavePix)
 
         //acao
@@ -208,15 +221,19 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         //cenario
         val chave = "+5512935001232"
         val idUsuario = "123456"
+        val ispb = "12345"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.TELEFONE)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.TELEFONE)
         chavePixRepository.save(chavePix)
+
+        val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
 
         //acao
         Mockito.`when`(itauErpClient.consultaClientes(idUsuario)).thenReturn(
-            HttpResponse.ok()
+            HttpResponse.ok(clienteResponse)
         )
 
+        Mockito.`when`(bancoCentralClient.deletaChave(chave, DeletePixKeyRequest(chave, ispb))).thenReturn(HttpResponse.ok())
 
         //validacao
 
@@ -246,7 +263,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "82917295066"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.CPF)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.CPF)
         chavePixRepository.save(chavePix)
 
         //acao
@@ -281,7 +298,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "82917295066"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.CPF)
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.CPF)
         chavePixRepository.save(chavePix)
 
         //acao
@@ -311,13 +328,19 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "82917295066"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, Tipo.CONTA_CORRENTE, TipoChave.CPF)
+        val ispb="12345"
+        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.CPF)
         chavePixRepository.save(chavePix)
+
+        val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
 
         //acao
         Mockito.`when`(itauErpClient.consultaClientes(idUsuario)).thenReturn(
-            HttpResponse.ok()
+            HttpResponse.ok(clienteResponse)
         )
+
+        Mockito.`when`(bancoCentralClient.deletaChave(chave, DeletePixKeyRequest(chave, ispb))).thenReturn(HttpResponse.ok())
+
 
 
         //validacao
@@ -344,6 +367,11 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
     @MockBean(ItauErpClient::class)
     fun itauClient(): ItauErpClient? {
         return Mockito.mock(ItauErpClient::class.java)
+    }
+
+    @MockBean(BancoCentralClient::class)
+    fun bancoCentralClient(): BancoCentralClient?{
+        return Mockito.mock(BancoCentralClient::class.java)
     }
 
 

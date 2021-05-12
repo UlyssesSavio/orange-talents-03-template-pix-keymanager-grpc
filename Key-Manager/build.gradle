@@ -42,11 +42,14 @@ dependencies {
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.micronaut:micronaut-http-client")
 
+    //Anotacao de validacao cpf
     implementation 'org.hibernate.validator:hibernate-validator:6.1.2.Final'
 
+    //testes
     testImplementation("com.h2database:h2")
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
 
+    implementation("io.micronaut.xml:micronaut-jackson-xml")
 
 }
 
@@ -89,4 +92,8 @@ protobuf {
     generateProtoTasks {
         all()*.plugins { grpc {} }
     }
+}
+
+allOpen {
+    annotation("br.com.zup.edu.anotacao.OpenClass")
 }

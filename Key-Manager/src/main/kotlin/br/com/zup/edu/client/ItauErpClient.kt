@@ -1,6 +1,5 @@
 package br.com.zup.edu.client
 
-import br.com.zup.edu.enum.Tipo
 import br.com.zup.edu.responseClient.ClienteResponse
 import br.com.zup.edu.responseClient.ContasResponse
 import io.micronaut.http.HttpResponse
