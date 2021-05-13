@@ -37,9 +37,8 @@ class ChavePixEndPoint(@Inject val chavePixRepository: ChavePixRepository,
     override fun cadastra(request: KeyPixRequest?, responseObserver: StreamObserver<KeyPixResponse>?) {
 
 
-        if(chavePixRepository.existsByChavePix(request?.chaveASerGerada)){
+        if(chavePixRepository.existsByChavePix(request?.chaveASerGerada))
             throw ChavePixExistenteException("Chave ja existente")
-        }
 
 
         var consultaContas: HttpResponse<ContasResponse>? = null
@@ -51,31 +50,20 @@ class ChavePixEndPoint(@Inject val chavePixRepository: ChavePixRepository,
         val pixRequest : PixRequest = request.toModel(consultaContas.body())
 
         val contaBanco = consultaContas.body()
-
-
-        if (!pixRequest.tipoChave.valida(pixRequest.chavePix))
-            throw ChaveInvalidaException("Chave ${pixRequest.tipoChave.name} invalida")
-
-
+        if (!pixRequest.tipChave.valida(pixRequest.chavePix))
+            throw ChaveInvalidaException("Chave ${pixRequest.tipChave.name} invalida")
 
 
         val createPixKeyRequest = CreatePixKeyRequest.build(request, contaBanco)
-
         var chavePix = pixRequest.toModel()
         try{
 
             val cadastraChave = bancoCentralClient.cadastraChave(createPixKeyRequest)
-
             chavePix.chavePix = cadastraChave.getBody().get().key
-
             chavePixRepository.save(chavePix)
         }catch (e:HttpClientResponseException){
             throw RuntimeException("Erro interno da outra api: ${e.cause}")
         }
-
-
-
-
 
         responseObserver?.onNext(KeyPixResponse.newBuilder().setChavePix(chavePix.chavePix).build())
         responseObserver?.onCompleted()

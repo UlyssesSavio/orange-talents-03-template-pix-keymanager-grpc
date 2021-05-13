@@ -3,11 +3,20 @@ package br.com.zup.edu.request
 import br.com.zup.edu.KeyPixRequest
 import br.com.zup.edu.anotacao.OpenClass
 import br.com.zup.edu.enum.TipoChave
+import br.com.zup.edu.functions.accontToTipo
+
+import br.com.zup.edu.functions.typeToTipo
+import br.com.zup.edu.model.ChavePixInfo
+import br.com.zup.edu.model.ContaEmbed
 import br.com.zup.edu.responseClient.ContasResponse
 import br.com.zup.edu.tipo
 import br.com.zup.edu.tipoChave
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.lang.reflect.Type
 import java.time.LocalDateTime
+import javax.persistence.Embeddable
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -48,15 +57,42 @@ data class CreatePixKeyResponse(
 ){
 
 }
+
+@OpenClass
+data class PixKeyDetailsResponse(
+    @field:JsonProperty val keyType: TypeKey,
+    @field:JsonProperty val key: String,
+    @field:JsonProperty val bankAccount: BankAccount,
+    @field:JsonProperty val owner: Owner,
+    @field:JsonProperty val createdAt: LocalDateTime
+){
+
+        fun toChavePixInfo(): ChavePixInfo{
+           return  ChavePixInfo("",null,null,
+               typeToTipo<TypeKey>(keyType),
+               bankAccount=bankAccount,
+               owner=owner,
+               chave = key,
+               tipoDeConta = accontToTipo<AccountBank>(bankAccount.accountType),
+           )
+
+        }
+
+}
+
+@Embeddable
 @OpenClass
 data class BankAccount(
     val participant: String,
     val branch: String,
     val accountNumber: String,
+    @field:Enumerated(EnumType.STRING)
     val accountType: AccountBank
 )
+@Embeddable
 @OpenClass
 data class Owner(
+    @field:Enumerated(EnumType.STRING)
     val type: PersonType,
     val name: String,
     val taxIdNumber: String
@@ -77,7 +113,9 @@ enum class AccountBank {
 }
 @OpenClass
 enum class PersonType {
-    NATURAL_PERSON, LEGAL_PERSON
+    NATURAL_PERSON, LEGAL_PERSON;
+
+
 }
 
 @OpenClass

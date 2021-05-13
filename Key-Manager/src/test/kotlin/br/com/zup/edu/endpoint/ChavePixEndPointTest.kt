@@ -30,9 +30,12 @@ import javax.inject.Singleton
 
 @MicronautTest(transactional = false)
 internal class ChavePixEndPointTest(
-    val chavePixRepository: ChavePixRepository,
-    val grpcClient: KeyManagerServiceGrpc.KeyManagerServiceBlockingStub
+    val chavePixRepository: ChavePixRepository
+
 ) {
+
+    @Inject
+    lateinit var grpcClient: KeyManagerServiceGrpc.KeyManagerServiceBlockingStub
 
     @Inject
     lateinit var itauErpClient: ItauErpClient
@@ -153,8 +156,6 @@ internal class ChavePixEndPointTest(
     fun `deve adicionar uma chave pix do tipo email`() {
 
         //cenario
-
-
         val email = "teste@teste.com"
         val cpf = "59715734030"
         val idUsuario = "c56dfef4-7901-44fb-84e2-a2cefb157890"
@@ -174,8 +175,6 @@ internal class ChavePixEndPointTest(
 
         val createPixKeyResponse = CreatePixKeyResponse(TypeKey.EMAIL, email, BankAccount("","","",AccountBank.CACC),
             Owner(PersonType.NATURAL_PERSON,"",""), LocalDateTime.now())
-
-
 
         Mockito.`when`(bancoCentralClient.cadastraChave(
             CreatePixKeyRequest.build(KeyPixRequest.newBuilder()
@@ -197,8 +196,6 @@ internal class ChavePixEndPointTest(
                 .setTipoChave(tipoChave.EMAIL)
                 .build()
         )
-
-
 
 
         //validacao
@@ -380,8 +377,6 @@ internal class ChavePixEndPointTest(
     fun `deve dar cpf invalido`() {
 
         //cenario
-
-
         val cpf = ""
         val idUsuario = "c56dfef4-7901-44fb-84e2-a2cefb157890"
 

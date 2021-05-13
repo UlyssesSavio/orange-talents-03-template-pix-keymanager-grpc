@@ -5,5 +5,6 @@ import br.com.zup.edu.model.Titular
 import br.com.zup.edu.tipo
 
 class ContasResponse(val tipo: tipo,
-                     val instituicao: Instituicao, val agencia:String, val numero:String, val titular: Titular) {
+                     val instituicao: Instituicao,
+                     val agencia:String, val numero:String, val titular: Titular) {
 }

@@ -10,9 +10,10 @@ import br.com.zup.edu.model.ChavePix
 import br.com.zup.edu.model.ContaEmbed
 import br.com.zup.edu.model.Instituicao
 import br.com.zup.edu.repository.ChavePixRepository
-import br.com.zup.edu.request.DeletePixKeyRequest
+import br.com.zup.edu.request.*
 import br.com.zup.edu.responseClient.ClienteResponse
 import br.com.zup.edu.tipo
+import br.com.zup.edu.tipoChave
 import io.grpc.ManagedChannel
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
@@ -30,8 +31,10 @@ import javax.inject.Singleton
 
 
 @MicronautTest(transactional = false)
-internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixRepository,
-                                          val grpcClient: KeyManagerRemoveGrpc.KeyManagerRemoveBlockingStub){
+internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixRepository
+                                          ){
+    @Inject
+    lateinit var grpcClient: KeyManagerRemoveGrpc.KeyManagerRemoveBlockingStub
 
     @Inject
     lateinit var itauErpClient: ItauErpClient
@@ -53,7 +56,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "ae7daf87-3f17-4070-99fe-24fb399327b4"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.RANDOM)
+
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+        Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM
+        )
         chavePixRepository.save(chavePix)
 
         //acao
@@ -82,7 +88,9 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
         val ispb = "12345"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.RANDOM)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM
+        )
         chavePixRepository.save(chavePix)
 
         val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
@@ -122,7 +130,11 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "teste@teste.com"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.EMAIL)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL
+        )
+
+
         chavePixRepository.save(chavePix)
 
         //acao
@@ -152,7 +164,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
         val ispb = "12345"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.EMAIL)
+        val chavePix = ChavePix("itau", BankAccount(ispb," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL
+        )
+
         chavePixRepository.save(chavePix)
 
         val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
@@ -193,7 +208,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "+5512935001232"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.TELEFONE)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE
+        )
+
         chavePixRepository.save(chavePix)
 
         //acao
@@ -223,7 +241,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
         val ispb = "12345"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.TELEFONE)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE
+        )
+
         chavePixRepository.save(chavePix)
 
         val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
@@ -263,7 +284,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "82917295066"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.CPF)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF
+        )
+
         chavePixRepository.save(chavePix)
 
         //acao
@@ -298,7 +322,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val chave = "82917295066"
         val idUsuario = "123456"
 
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.CPF)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF
+        )
+
         chavePixRepository.save(chavePix)
 
         //acao
@@ -329,7 +356,10 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
 
         val ispb="12345"
-        val chavePix = ChavePix(ContaEmbed("Itau", "123"), "123456", chave, tipo.CONTA_CORRENTE, TipoChave.CPF)
+        val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF
+        )
+
         chavePixRepository.save(chavePix)
 
         val clienteResponse = ClienteResponse("", "", "", Instituicao("itau", ispb))
