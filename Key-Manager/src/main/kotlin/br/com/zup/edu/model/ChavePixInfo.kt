@@ -32,7 +32,8 @@ data class ChavePixInfo(val instituicaoNome:String,
                 chave.chavePix,
                 chave.tipo,
                 chave.bankAccount,
-                chave.owner
+                chave.owner,
+                chave.registradaEm
                 )
 
         }

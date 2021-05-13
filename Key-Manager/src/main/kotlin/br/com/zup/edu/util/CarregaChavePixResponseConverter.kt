@@ -29,6 +29,7 @@ class CarregaChavePixResponseConverter {
                 .setCriadaEm(chavePixInfo.registradaEm.let {
                     val createAt = it.atZone(ZoneId.of("UTC")).toInstant()
                     Timestamp.newBuilder()
+
                         .setSeconds(createAt.epochSecond)
                         .setNanos(createAt.nano)
                         .build()

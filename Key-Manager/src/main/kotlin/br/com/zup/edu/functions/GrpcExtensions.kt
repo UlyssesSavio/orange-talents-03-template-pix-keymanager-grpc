@@ -23,6 +23,7 @@ fun KeyPixRequest.toModel(contasResponse: ContasResponse): PixRequest {
          if(TipoChave.RANDOM==TipoChave.valueOf(tipoChave.name)) "" else chaveASerGerada
         , tipo = tipo
         , tipChave = TipoChave.valueOf(tipoChave.name)
+
     )
 
 

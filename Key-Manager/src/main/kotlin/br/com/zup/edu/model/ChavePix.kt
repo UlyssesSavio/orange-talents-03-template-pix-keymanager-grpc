@@ -8,6 +8,7 @@ import br.com.zup.edu.tipo
 import br.com.zup.edu.tipoChave
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.id.uuid.StandardRandomStrategy
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -22,7 +23,8 @@ class ChavePix(
     @field:Enumerated(EnumType.STRING)
     val tipo: tipo,
     @field:Enumerated(EnumType.STRING)
-    val tipoChave: tipoChave
+    val tipoChave: tipoChave,
+    val registradaEm:LocalDateTime
 )
 {
     @Id

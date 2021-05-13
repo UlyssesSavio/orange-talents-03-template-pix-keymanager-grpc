@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -58,7 +59,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
 
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-        Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM
+        Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM, LocalDateTime.now()
         )
         chavePixRepository.save(chavePix)
 
@@ -89,7 +90,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val ispb = "12345"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM, LocalDateTime.now()
         )
         chavePixRepository.save(chavePix)
 
@@ -131,7 +132,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL, LocalDateTime.now()
         )
 
 
@@ -165,7 +166,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val ispb = "12345"
 
         val chavePix = ChavePix("itau", BankAccount(ispb," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -209,7 +210,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -242,7 +243,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val ispb = "12345"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -285,7 +286,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -323,7 +324,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val idUsuario = "123456"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -357,7 +358,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
 
         val ispb="12345"
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF
+            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)

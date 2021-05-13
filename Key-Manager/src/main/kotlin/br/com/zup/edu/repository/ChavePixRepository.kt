@@ -10,4 +10,6 @@ interface ChavePixRepository: JpaRepository<ChavePix, String>{
     fun existsByChavePix(chaveASerGerada: String?): Boolean
     fun deleteByChavePix(chave:String)
     fun findByChavePix(chave:String): Optional<ChavePix>
+    fun findAllByIdConta(chave:String): MutableList<ChavePix>
+
 }

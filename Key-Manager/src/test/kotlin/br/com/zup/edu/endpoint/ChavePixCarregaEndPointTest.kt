@@ -186,7 +186,7 @@ internal class ChavePixCarregaEndPointTest(val chavePixRepository: ChavePixRepos
 
     private fun criaChave(chave:String, tipoChave: tipoChave):ChavePix{
         return ChavePix("Itau", BankAccount("123","123", "123",AccountBank.CACC),
-        Owner(PersonType.NATURAL_PERSON, "Joao", "123"),"123",chave, tipo.CONTA_CORRENTE, tipoChave)
+        Owner(PersonType.NATURAL_PERSON, "Joao", "123"),"123",chave, tipo.CONTA_CORRENTE, tipoChave, LocalDateTime.now())
 
     }
 
