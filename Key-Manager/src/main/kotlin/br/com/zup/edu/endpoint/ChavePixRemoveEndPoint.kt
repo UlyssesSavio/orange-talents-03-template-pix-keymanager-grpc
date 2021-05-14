@@ -34,20 +34,29 @@ class ChavePixRemoveEndPoint(@Inject val chavePixRepository: ChavePixRepository,
 
         if(!chavePixRepository.existsByChavePix(request?.chave)) throw ChaveNaoEncontradaException("Chave nao existe")
 
+
+
         val client:ClienteResponse
         try {
             val clientRes = itauErpClient.consultaClientes(request!!.idUsuario)
             client=clientRes.body()
-        }catch (e: HttpClientResponseException){
+        }catch (e: Exception){
+
             throw  UsuarioNaoEncontradoException("Usuario nao encontrado")
         }
 
         try {
+            if(!chavePixRepository.existsByChavePixAndIdConta(request.chave, request.idUsuario))
+                throw SemPermissaoException("Sem permissao para remover chave")
+
             bancoCentralClient.deletaChave(
                 request.chave,
                 DeletePixKeyRequest(request.chave, client.instituicao.ispb)
             )
         }catch (e:HttpClientResponseException){
+
+
+
             if(e.status == HttpStatus.FORBIDDEN){
                 throw SemPermissaoException("Sem permissao para remover chave")
             }else
