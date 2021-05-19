@@ -3,9 +3,12 @@ micronaut:
     name: keyManager
 datasources:
   default:
-    url: jdbc:mysql://localhost:3306/kotlin?useTimezone=true&serverTimezone=UTC
-    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mariadb://db:3306/mysql-mariadb?createDatabaseIfNotExist=true&serverTimezone=UTC
+    driverClassName: org.mariadb.jdbc.Driver
     username: root
     password: root
-    dialect: mysql
-jpa.default.properties.hibernate.hbm2ddl.auto: update
+jpa.default.properties.hibernate.hbm2ddl.auto: create
+
+cliente:
+  itau: http://localhost:9091/api/v1
+  bcb: http://localhost:8082/api/v1

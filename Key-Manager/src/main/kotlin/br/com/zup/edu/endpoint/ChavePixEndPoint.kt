@@ -34,16 +34,17 @@ class ChavePixEndPoint(@Inject val chavePixRepository: ChavePixRepository,
                             @Inject val itauErpClient: ItauErpClient,
                             @Inject val bancoCentralClient: BancoCentralClient): KeyManagerServiceGrpc.KeyManagerServiceImplBase() {
 
-    override fun cadastra(request: KeyPixRequest?, responseObserver: StreamObserver<KeyPixResponse>?) {
+    override fun cadastra(request: KeyPixRequest, responseObserver: StreamObserver<KeyPixResponse>) {
 
 
-        if(chavePixRepository.existsByChavePix(request?.chaveASerGerada))
+        println("\n\n entrou no cadastra endpoint\n\n")
+        if(chavePixRepository.existsByChavePix(request.chaveASerGerada))
             throw ChavePixExistenteException("Chave ja existente")
 
 
         var consultaContas: HttpResponse<ContasResponse>? = null
         try {
-            consultaContas = itauErpClient.consultaContas(request!!.identificadorCliente, request.tipo.toString())
+            consultaContas = itauErpClient.consultaContas(request.identificadorCliente, request.tipo.toString())
         }catch (e: HttpClientResponseException){
             throw UsuarioNaoEncontradoException("Usuario nao encontrado")
         }

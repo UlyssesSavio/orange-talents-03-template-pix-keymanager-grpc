@@ -8,7 +8,7 @@ import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 
-@Client("http://localhost:9091/api/v1")
+@Client("\${cliente.itau}")
 interface ItauErpClient {
     @Get("/clientes/{clienteId}/contas")
     fun consultaContas(@PathVariable clienteId:String, @QueryValue tipo:String) : HttpResponse<ContasResponse>

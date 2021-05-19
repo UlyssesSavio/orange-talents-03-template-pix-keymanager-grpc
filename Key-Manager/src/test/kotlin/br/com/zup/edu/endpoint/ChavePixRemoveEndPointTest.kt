@@ -90,7 +90,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val ispb = "12345"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM, LocalDateTime.now()
+            Owner(PersonType.NATURAL_PERSON, " "," "),idUsuario, chave, tipo.CONTA_CORRENTE, tipoChave.RANDOM, LocalDateTime.now()
         )
         chavePixRepository.save(chavePix)
 
@@ -166,7 +166,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val ispb = "12345"
 
         val chavePix = ChavePix("itau", BankAccount(ispb," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL, LocalDateTime.now()
+            Owner(PersonType.NATURAL_PERSON, " "," "),idUsuario, chave, tipo.CONTA_CORRENTE, tipoChave.EMAIL, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -243,7 +243,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
         val ispb = "12345"
 
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE, LocalDateTime.now()
+            Owner(PersonType.NATURAL_PERSON, " "," "),idUsuario, chave, tipo.CONTA_CORRENTE, tipoChave.TELEFONE, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -358,7 +358,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
 
         val ispb="12345"
         val chavePix = ChavePix("itau", BankAccount(" "," ", " ", AccountBank.CACC),
-            Owner(PersonType.NATURAL_PERSON, " "," "),"123", chave, tipo.CONTA_CORRENTE, tipoChave.CPF, LocalDateTime.now()
+            Owner(PersonType.NATURAL_PERSON, " "," "),idUsuario, chave, tipo.CONTA_CORRENTE, tipoChave.CPF, LocalDateTime.now()
         )
 
         chavePixRepository.save(chavePix)
@@ -409,7 +409,7 @@ internal class ChavePixRemoveEndPointTest(val chavePixRepository: ChavePixReposi
     @Factory
     class Clients {
         @Singleton
-        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerRemoveGrpc.KeyManagerRemoveBlockingStub {
+        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerRemoveGrpc.KeyManagerRemoveBlockingStub ?{
             return KeyManagerRemoveGrpc.newBlockingStub(channel)
         }
     }

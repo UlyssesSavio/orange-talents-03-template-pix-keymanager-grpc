@@ -92,7 +92,7 @@ enum tipoChave{
   RANDOM=3;
 
 }
-
+//asd a
 message KeyRemoveRequest{
   string idUsuario =1;
   string chave =2;
