@@ -5,7 +5,7 @@ phases:
       java: corretto11
   build:
     commands:
-     - ./gradlew shadowJar --scan
+     - gradlew shadowJar --scan
 
 artifacts:
   files:
