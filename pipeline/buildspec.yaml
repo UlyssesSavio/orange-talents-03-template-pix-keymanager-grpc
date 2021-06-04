@@ -16,7 +16,7 @@ phases:
       - echo connecting ecr
       - docker login -u AWS -p $(aws ecr-public get-login-password --region us-east-1) $URL_REPO
       # aqui você poderá colocar os comandos para o build de seu projeto, exemplo:
-      - sh gradlew build
+      - sh gradlew build -x test
       - echo exporting kubeconfig
       - export KUBECONFIG=$HOME/.kube/config
       
